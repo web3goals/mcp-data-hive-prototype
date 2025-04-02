@@ -1,0 +1,14 @@
+{
+  "name": "mcp",
+  "version": "0.1.0",
+  "scripts": {
+    "server": "ts-node ./scripts/server.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "winston": "^3.17.0"
+  }
+}
