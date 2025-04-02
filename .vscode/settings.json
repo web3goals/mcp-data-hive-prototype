@@ -1,20 +1,4 @@
 {
   "editor.formatOnSave": true,
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "mcp": {
-    "inputs": [],
-    "servers": {
-      "fetch": {
-        "command": "docker",
-        "args": [
-          "run",
-          "-i",
-          "--rm",
-          "mcp/fetch"
-        ]
-      }
-    }
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
