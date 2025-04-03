@@ -2,7 +2,7 @@
   "name": "mcp",
   "version": "0.1.0",
   "scripts": {
-    "server": "ts-node ./scripts/server.ts"
+    "server": "ts-node ./scripts/index.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
