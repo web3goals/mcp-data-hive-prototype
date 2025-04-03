@@ -1,43 +1,37 @@
-import {
-  McpServer,
-  ResourceTemplate,
-} from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import express, { Request, Response } from "express";
 import { z } from "zod";
 import { logger } from "./lib/logger";
+import { getCandles } from "./lib/dataset";
 
 async function main() {
-  logger.info("Starting server...");
+  logger.info("Starting MCP server...");
 
   const server = new McpServer({
     name: "mcp-data-hive",
     version: "0.1.0",
   });
 
-  // Add an addition tool
-  server.tool("add", { a: z.number(), b: z.number() }, async ({ a, b }) => ({
-    content: [{ type: "text", text: String(a + b) }],
-  }));
-
-  // Add a dynamic greeting resource
-  server.resource(
-    "greeting",
-    new ResourceTemplate("greeting://{name}", { list: undefined }),
-    async (uri, { name }) => ({
-      contents: [
-        {
-          uri: uri.href,
-          text: `Hello, ${name}!`,
-        },
-      ],
-    })
+  server.tool(
+    "get_candles",
+    "Get an array of trading candles (date, open, high, low, close, volume) for a specified token",
+    { symbol: z.string() },
+    async ({ symbol }) => {
+      // TODO: Check if dataset exists
+      // TODO: Check if agent has access to dataset
+      const candles = getCandles(symbol);
+      return {
+        content: [
+          { type: "text", text: candles ? JSON.stringify(candles) : "No data" },
+        ],
+      };
+    }
   );
 
   const app = express();
 
-  // to support multiple simultaneous connections we have a lookup object from
-  // sessionId to transport
+  // To support multiple simultaneous connections we have a lookup object from sessionId to transport
   const transports: { [sessionId: string]: SSEServerTransport } = {};
 
   app.get("/sse", async (_: Request, res: Response) => {
