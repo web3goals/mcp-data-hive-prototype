@@ -7,25 +7,38 @@ async function main() {
   logger.info("Starting MCP server...");
 
   const app = express();
-  const server = createServer();
+  const sessions: {
+    [sessionId: string]: {
+      transport: SSEServerTransport;
+      accessToken?: string;
+    };
+  } = {};
+  const server = createServer({
+    getSessionAccessToken: (sessionId: string) =>
+      sessions[sessionId].accessToken,
+  });
 
-  // Store session transports to support multiple simultaneous connections
-  const transports: { [sessionId: string]: SSEServerTransport } = {};
-
-  app.get("/sse", async (_: Request, res: Response) => {
+  app.get("/sse", async (req: Request, res: Response) => {
+    const reqParams = new URLSearchParams(
+      decodeURIComponent(req.url.split("?")[1])
+    );
+    const accessToken = reqParams.get("access_token");
     const transport = new SSEServerTransport("/messages", res);
-    transports[transport.sessionId] = transport;
+    sessions[transport.sessionId] = {
+      transport: transport,
+      accessToken: accessToken || undefined,
+    };
     res.on("close", () => {
-      delete transports[transport.sessionId];
+      delete sessions[transport.sessionId];
     });
     await server.connect(transport);
   });
 
   app.post("/messages", async (req: Request, res: Response) => {
     const sessionId = req.query.sessionId as string;
-    const transport = transports[sessionId];
-    if (transport) {
-      await transport.handlePostMessage(req, res);
+    const session = sessions[sessionId];
+    if (session.transport) {
+      await session.transport.handlePostMessage(req, res);
     } else {
       res.status(400).send("No transport found for sessionId");
     }

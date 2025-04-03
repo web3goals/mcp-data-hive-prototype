@@ -1,3 +1,9 @@
+/**
+ * TODO: Implement:
+ * 1. Load a dataset by symbol (source, period, dates)
+ * 2. Check if an agent has access to dataset
+ * 3. Return dataset
+ */
 export function getCandles(symbol: string): Object | undefined {
   if (symbol === "ETHUSDT") {
     return [

@@ -2,7 +2,7 @@
   "servers": {
     "mcp-data-hive": {
       "type": "sse",
-      "url": "http://localhost:3001/sse"
+      "url": "http://localhost:3001/sse?access_token=42"
     }
   }
 }
