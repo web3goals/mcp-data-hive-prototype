@@ -5,9 +5,25 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { getCandles } from "./dataset";
+import { getCandles, getSentiment } from "./dataset";
 
-const GetCandlesSchema = z.object({ symbol: z.string() });
+const GetCandlesSchema = z.object({
+  symbol: z
+    .string()
+    .describe("Symbol for getting candles, e.g. 'eth', 'trump'"),
+  source: z
+    .string()
+    .describe("Source for getting candles, e.g. 'meteora', 'binance'"),
+});
+
+const GetSentimentSchema = z.object({
+  symbol: z
+    .string()
+    .describe("Symbol for getting sentiment, e.g. 'eth', 'trump'"),
+  source: z
+    .string()
+    .describe("Source for getting sentiment, e.g. 'x', 'warpcast'"),
+});
 
 export function createServer(params: {
   getSessionAccessToken: (sessionId: string) => string | undefined;
@@ -30,8 +46,14 @@ export function createServer(params: {
         {
           name: "get_candles",
           description:
-            "Get an array of trading candles (date, open, high, low, close, volume) for a specified token",
+            "Get an array of trading candles data (date, open, high, low, close, volume) for the specified symbol and source",
           inputSchema: zodToJsonSchema(GetCandlesSchema),
+        },
+        {
+          name: "get_sentiment",
+          description:
+            "Get an array of sentiment data (date, positive, negative, neutral, volume) for the specified symbol and source",
+          inputSchema: zodToJsonSchema(GetSentimentSchema),
         },
       ],
     };
@@ -54,12 +76,25 @@ export function createServer(params: {
       switch (request.params.name) {
         case "get_candles": {
           const args = GetCandlesSchema.parse(request.params.arguments);
-          const candles = getCandles(args.symbol);
+          const candles = getCandles(accessToken, args.symbol, args.source);
           return {
             content: [
               {
                 type: "text",
                 text: candles ? JSON.stringify(candles) : "No data",
+              },
+            ],
+          };
+        }
+
+        case "get_sentiment": {
+          const args = GetSentimentSchema.parse(request.params.arguments);
+          const sentiment = getSentiment(accessToken, args.symbol, args.source);
+          return {
+            content: [
+              {
+                type: "text",
+                text: sentiment ? JSON.stringify(sentiment) : "No data",
               },
             ],
           };

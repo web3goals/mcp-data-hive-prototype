@@ -19,6 +19,7 @@ async function main() {
   });
 
   app.get("/sse", async (req: Request, res: Response) => {
+    logger.info("Processing GET SSE request...");
     const reqParams = new URLSearchParams(
       decodeURIComponent(req.url.split("?")[1])
     );
@@ -35,6 +36,7 @@ async function main() {
   });
 
   app.post("/messages", async (req: Request, res: Response) => {
+    logger.info("Processing POST message request...");
     const sessionId = req.query.sessionId as string;
     const session = sessions[sessionId];
     if (session.transport) {
