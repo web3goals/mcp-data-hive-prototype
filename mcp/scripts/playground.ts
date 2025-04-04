@@ -1,12 +1,8 @@
-import { testnet } from "@recallnet/chains";
 import * as dotenv from "dotenv";
-import { createWalletClient, Hex, http } from "viem";
-import {
-  generatePrivateKey,
-  privateKeyToAccount,
-  privateKeyToAddress,
-} from "viem/accounts";
+import { v4 as uuidv4 } from "uuid";
+import { generatePrivateKey, privateKeyToAddress } from "viem/accounts";
 import { logger } from "./lib/logger";
+import { loadJsonData, saveJsonData } from "./lib/recall";
 
 dotenv.config();
 
@@ -21,34 +17,13 @@ function createWallet() {
 async function useRecall() {
   logger.info("Using Recall...");
 
-  // Create a new wallet
-  const walletClient = createWalletClient({
-    account: privateKeyToAccount(process.env.RECALL_ACCOUNT_PRIVATE_KEY as Hex),
-    chain: testnet,
-    transport: http(),
-  });
+  const key = uuidv4();
+  const data = { message: "Hello world!" };
+  await saveJsonData(data, key);
+  logger.info(`Data saved with key: ${key}`);
 
-  // Create a new Recall client and bucket manager
-  const { RecallClient } = await import("@recallnet/sdk/client");
-  const client = new RecallClient({ walletClient });
-  const bucketManager = client.bucketManager();
-
-  // Define the bucket and object key
-  const bucket = "0xff00000000000000000000000000000000036074";
-  const key = "hello/world";
-
-  // Add an object to the bucket
-  const originalContent = new TextEncoder().encode("Hello world!");
-  const file = new File([originalContent], "file.txt", {
-    type: "text/plain",
-  });
-  const { meta: addMeta } = await bucketManager.add(bucket, key, file);
-  logger.info(`Object added at: ${addMeta?.tx?.transactionHash}"`);
-
-  // Get the object from the bucket
-  const { result: object } = await bucketManager.get(bucket, key);
-  const receivedContent = new TextDecoder().decode(object);
-  logger.info(`Received content: ${receivedContent}`);
+  const loadedData = await loadJsonData(key);
+  logger.info(`Data loaded: ${JSON.stringify(loadedData)}`);
 }
 
 async function main() {
