@@ -2,16 +2,21 @@
   "name": "mcp",
   "version": "0.1.0",
   "scripts": {
-    "server": "ts-node ./scripts/index.ts"
+    "server": "ts-node ./scripts/index.ts",
+    "playground": "ts-node ./scripts/playground.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "dotenv": "^16.4.7"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.8.0",
+    "@recallnet/chains": "^0.0.6",
+    "@recallnet/sdk": "^0.0.7",
     "express": "^5.1.0",
+    "viem": "^2.25.0",
     "winston": "^3.17.0"
   }
 }
