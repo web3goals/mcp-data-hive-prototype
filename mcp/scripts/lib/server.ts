@@ -13,7 +13,7 @@ const GetCandlesSchema = z.object({
     .describe("Symbol for getting candles, e.g. 'eth', 'trump'"),
   source: z
     .string()
-    .describe("Source for getting candles, e.g. 'meteora', 'binance'"),
+    .describe("Source for getting candles, e.g. 'binance', 'meteora'"),
 });
 
 const GetSentimentSchema = z.object({
@@ -76,7 +76,11 @@ export function createServer(params: {
       switch (request.params.name) {
         case "get_candles": {
           const args = GetCandlesSchema.parse(request.params.arguments);
-          const candles = getCandles(accessToken, args.symbol, args.source);
+          const candles = await getCandles(
+            accessToken,
+            args.symbol,
+            args.source
+          );
           return {
             content: [
               {
@@ -89,7 +93,11 @@ export function createServer(params: {
 
         case "get_sentiment": {
           const args = GetSentimentSchema.parse(request.params.arguments);
-          const sentiment = getSentiment(accessToken, args.symbol, args.source);
+          const sentiment = await getSentiment(
+            accessToken,
+            args.symbol,
+            args.source
+          );
           return {
             content: [
               {
