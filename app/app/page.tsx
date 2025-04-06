@@ -25,13 +25,13 @@ export default function LandingPage() {
         Context Protocol (MCP)
       </p>
       <div className="flex flex-row gap-2 mt-4">
-        <Link href="/agents/new">
+        <Link href="/datasets/listed">
           <Button>
             <StoreIcon /> Sell dataset
           </Button>
         </Link>
-        <Link href="/agents/new">
-          <Button>
+        <Link href="/datasets/explore">
+          <Button variant="outline">
             <GlobeIcon /> Explore datasets
           </Button>
         </Link>
