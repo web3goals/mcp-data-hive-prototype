@@ -1,4 +1,4 @@
-export const fakeMeteoraTrumpCandles = [
+export const fakeMeteoraTrumpUsdtCandles = [
   {
     date: "2025-03-01",
     open: 12.5,

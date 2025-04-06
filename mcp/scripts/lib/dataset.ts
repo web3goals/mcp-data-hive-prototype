@@ -17,7 +17,7 @@ export async function getCandles(
     `Getting candles for '${accessToken}', '${symbol}', '${source}'...`
   );
   if (
-    symbol.toLowerCase() === "trump" &&
+    symbol.toLowerCase() === "trumpusdt" &&
     source.toLowerCase() === "meteora" &&
     accessToken === "42"
   ) {

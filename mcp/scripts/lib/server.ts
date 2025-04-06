@@ -10,7 +10,7 @@ import { getCandles, getSentiment } from "./dataset";
 const GetCandlesSchema = z.object({
   symbol: z
     .string()
-    .describe("Symbol for getting candles, e.g. 'eth', 'trump'"),
+    .describe("Symbol for getting candles, e.g. 'ethusdt', 'trumpusdt'"),
   source: z
     .string()
     .describe("Source for getting candles, e.g. 'binance', 'meteora'"),
