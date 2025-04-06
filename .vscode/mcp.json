@@ -1,6 +1,6 @@
 {
   "servers": {
-    "mcp-data-hive": {
+    "mcpDataHive": {
       "type": "sse",
       "url": "http://localhost:3001/sse?access_token=42"
     }
