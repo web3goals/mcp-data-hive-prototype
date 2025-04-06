@@ -4,11 +4,14 @@ import { siteConfig } from "@/config/site";
 import { privyUserToEmail } from "@/lib/converters";
 import { usePrivy } from "@privy-io/react-auth";
 import {
-  BoxIcon,
+  CloudCogIcon,
   GithubIcon,
+  GlobeIcon,
   LogInIcon,
   LogOutIcon,
   MenuIcon,
+  ShoppingBag,
+  StoreIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -66,10 +69,29 @@ export function SiteHeader() {
                 <>
                   <Link href="/datasets/listed">
                     <DropdownMenuItem>
-                      <BoxIcon />
+                      <StoreIcon />
                       <span>Listed datasets</span>
                     </DropdownMenuItem>
                   </Link>
+                  <Link href="/datasets/puchased">
+                    <DropdownMenuItem>
+                      <ShoppingBag />
+                      <span>Purchased datasets</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/datasets/explore">
+                    <DropdownMenuItem>
+                      <GlobeIcon />
+                      <span>Explore datasets</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/mcp-server">
+                    <DropdownMenuItem>
+                      <CloudCogIcon />
+                      <span>MCP Server</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => logout()}>
                     <LogOutIcon />
                     <span>
