@@ -6,6 +6,7 @@ import { loadJsonData, saveJsonData } from "./lib/recall";
 
 dotenv.config();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createWallet() {
   logger.info("Creating a new wallet...");
   const privateKey = generatePrivateKey();
@@ -14,6 +15,7 @@ function createWallet() {
   logger.info(`Private Key: ${privateKey}`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function useRecall() {
   logger.info("Using Recall...");
 

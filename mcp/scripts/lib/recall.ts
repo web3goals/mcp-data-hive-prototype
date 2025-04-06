@@ -15,7 +15,7 @@ async function getBucketManager() {
   return client.bucketManager();
 }
 
-export async function saveJsonData(data: Object, key: string) {
+export async function saveJsonData(data: object, key: string) {
   const content = new TextEncoder().encode(JSON.stringify(data, null, 2));
   const file = new File([content], "data.json", {
     type: "application/json",
@@ -24,7 +24,7 @@ export async function saveJsonData(data: Object, key: string) {
   await bucketManager.add(process.env.RECALL_BUCKET as Hex, key, file);
 }
 
-export async function loadJsonData(key: string): Promise<Object> {
+export async function loadJsonData(key: string): Promise<object> {
   const bucketManager = await getBucketManager();
   const { result } = await bucketManager.get(
     process.env.RECALL_BUCKET as Hex,

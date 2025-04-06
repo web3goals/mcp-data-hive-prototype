@@ -12,7 +12,7 @@ export async function getCandles(
   accessToken: string,
   symbol: string,
   source: string
-): Promise<Object | undefined> {
+): Promise<object | undefined> {
   logger.info(
     `Getting candles for '${accessToken}', '${symbol}', '${source}'...`
   );
@@ -33,7 +33,7 @@ export async function getSentiment(
   accessToken: string,
   symbol: string,
   source: string
-): Promise<Object | undefined> {
+): Promise<object | undefined> {
   logger.info(
     `Getting sentiment for '${accessToken}', '${symbol}', '${source}'...`
   );
