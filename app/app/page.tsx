@@ -1,7 +1,41 @@
+import { Button } from "@/components/ui/button";
+import { GlobeIcon, StoreIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+
 export default function LandingPage() {
   return (
-    <main className="container mx-auto px-4 py-16 lg:px-80">
-      <p>Landing page...</p>
+    <main className="container mx-auto px-4 lg:px-80 py-12">
+      <div className="flex flex-col items-center">
+        <Image
+          src="/images/cover.png"
+          alt="Cover"
+          priority={false}
+          width="100"
+          height="100"
+          sizes="100vw"
+          className="w-full rounded-xl"
+        />
+      </div>
+      <h1 className="text-4xl xl:text-5xl font-extrabold tracking-tighter mt-4">
+        The Data Hive Where AI Gathers Wisdom
+      </h1>
+      <p className="font-medium tracking-tight text-muted-foreground mt-2">
+        A marketplace where users sell datasets to AI agents through the Model
+        Context Protocol (MCP)
+      </p>
+      <div className="flex flex-row gap-2 mt-4">
+        <Link href="/agents/new">
+          <Button>
+            <StoreIcon /> Sell dataset
+          </Button>
+        </Link>
+        <Link href="/agents/new">
+          <Button>
+            <GlobeIcon /> Explore datasets
+          </Button>
+        </Link>
+      </div>
     </main>
   );
 }
