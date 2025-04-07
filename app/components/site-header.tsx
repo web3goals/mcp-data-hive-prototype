@@ -73,7 +73,7 @@ export function SiteHeader() {
                       <span>Listed datasets</span>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/datasets/puchased">
+                  <Link href="/datasets/purchased">
                     <DropdownMenuItem>
                       <ShoppingBag />
                       <span>Purchased datasets</span>
