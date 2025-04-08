@@ -1,4 +1,5 @@
 import { mongoDBConfig } from "@/config/mongodb";
+import { DatasetSale } from "@/types/dataset-sale";
 import { Collection, ObjectId } from "mongodb";
 import clientPromise from "../client";
 import { Dataset } from "../models/dataset";
@@ -21,6 +22,11 @@ export async function insertDataset(dataset: Dataset): Promise<ObjectId> {
   const collection = await getCollectionDatasets();
   const insertOneResult = await collection.insertOne(dataset);
   return insertOneResult.insertedId;
+}
+
+export async function addDatasetSale(id: ObjectId, sale: DatasetSale) {
+  const collection = await getCollectionDatasets();
+  await collection.updateOne({ _id: id }, { $push: { sales: sale } });
 }
 
 async function getCollectionDatasets(): Promise<Collection<Dataset>> {

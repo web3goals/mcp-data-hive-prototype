@@ -1,28 +1,74 @@
 import { chainConfig } from "@/config/chain";
+import useError from "@/hooks/use-error";
 import { addressToShortAddress } from "@/lib/converters";
 import { Dataset } from "@/mongodb/models/dataset";
 import { DatasetType } from "@/types/dataset-type";
+import { usePrivy } from "@privy-io/react-auth";
+import axios from "axios";
 import {
   CalendarIcon,
   CaseUpperIcon,
   DatabaseIcon,
   DollarSignIcon,
   FileJsonIcon,
+  Loader2Icon,
+  ShoppingBagIcon,
   TextIcon,
   UserRoundIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 import { formatEther } from "viem";
+import { Button } from "../ui/button";
 
 export function DatasetCard(props: {
   dataset: Dataset;
   onDatasetUpdate: () => void;
 }) {
+  const { user } = usePrivy();
+  const { handleError } = useError();
+  const [isProsessing, setIsProsessing] = useState(false);
+
   const types: Record<DatasetType, { image: string; string: string }> = {
     CANDLES: { image: "/images/type-candles.png", string: "Candles" },
     SENTIMENT: { image: "/images/type-sentiment.png", string: "Sentiment" },
   };
+
+  async function handleBuy() {
+    try {
+      setIsProsessing(true);
+
+      // Check if user is logged in
+      if (!user) {
+        toast.warning(`Please login`);
+        return;
+      }
+
+      // Use contract
+      // TODO: Implement contract call
+      const txHash = "0x0";
+
+      // Send request to API
+      await axios.post("/api/datasets/buy", {
+        id: props.dataset._id,
+        buyerId: user?.id,
+        buyerAddress: user?.wallet?.address,
+        txHash: txHash,
+      });
+
+      // Update dataset in the state
+      props.onDatasetUpdate();
+
+      // Show success message
+      toast("Dataset purchased 🎉");
+    } catch (error) {
+      handleError(error, "Failed to buy the dataset, try again later");
+    } finally {
+      setIsProsessing(false);
+    }
+  }
 
   return (
     <div className="w-full flex flex-row gap-6 border rounded px-6 py-6">
@@ -130,7 +176,22 @@ export function DatasetCard(props: {
           {/* Sales */}
           {/* TODO: */}
         </div>
-        {/* Actions */}
+        {/* Buy button  */}
+        {!props.dataset.sales.find((sale) => sale.buyerId === user?.id) && (
+          <Button
+            disabled={isProsessing}
+            onClick={() => handleBuy()}
+            className="mt-12"
+          >
+            {isProsessing ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              <ShoppingBagIcon />
+            )}
+            Buy
+          </Button>
+        )}
+        {/* Open data icon */}
         {/* TODO: */}
       </div>
     </div>
