@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/site";
-import { privyUserToEmail } from "@/lib/converters";
+import { privyUserToDisplayName } from "@/lib/converters";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   CloudCogIcon,
@@ -97,7 +97,7 @@ export function SiteHeader() {
                     <span>
                       Logout{" "}
                       <p className="text-xs text-muted-foreground">
-                        {privyUserToEmail(user)}
+                        {privyUserToDisplayName(user)}
                       </p>
                     </span>
                   </DropdownMenuItem>

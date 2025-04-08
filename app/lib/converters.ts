@@ -32,6 +32,10 @@ export function errorToString(error: unknown): string {
   return message;
 }
 
-export function privyUserToEmail(user: User | null): string | undefined {
-  return user?.email?.address || user?.google?.email;
+export function privyUserToDisplayName(user: User | null): string | undefined {
+  return (
+    user?.email?.address ||
+    user?.google?.email ||
+    addressToShortAddress(user?.wallet?.address)
+  );
 }
