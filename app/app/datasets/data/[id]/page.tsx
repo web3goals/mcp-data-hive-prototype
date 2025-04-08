@@ -6,7 +6,7 @@ import { LoginSection } from "@/components/login-section";
 import { usePrivy } from "@privy-io/react-auth";
 import { useParams } from "next/navigation";
 
-export default function TokenPage() {
+export default function DatasetDataPage() {
   const { id } = useParams();
   const { ready, authenticated } = usePrivy();
 
