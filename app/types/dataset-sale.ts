@@ -1,8 +1,8 @@
-import { Address } from "viem";
+import { Address, Hash } from "viem";
 
 export type DatasetSale = {
   date: string;
   buyerId: string;
   buyerAddress: Address;
-  txHash: string;
+  txHash: Hash;
 };
