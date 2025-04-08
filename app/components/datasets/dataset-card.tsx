@@ -6,6 +6,7 @@ import { DatasetType } from "@/types/dataset-type";
 import { usePrivy } from "@privy-io/react-auth";
 import axios from "axios";
 import {
+  BracesIcon,
   CalendarIcon,
   CaseUpperIcon,
   DatabaseIcon,
@@ -30,6 +31,11 @@ export function DatasetCard(props: {
   const { user } = usePrivy();
   const { handleError } = useError();
   const [isProsessing, setIsProsessing] = useState(false);
+
+  const isUserSeller = props.dataset.sellerId === user?.id;
+  const isUserPurchased = props.dataset.sales.find(
+    (sale) => sale.buyerId === user?.id
+  );
 
   const types: Record<DatasetType, { image: string; string: string }> = {
     CANDLES: { image: "/images/type-candles.png", string: "Candles" },
@@ -177,11 +183,11 @@ export function DatasetCard(props: {
           {/* TODO: */}
         </div>
         {/* Buy button  */}
-        {!props.dataset.sales.find((sale) => sale.buyerId === user?.id) && (
+        {!isUserPurchased && (
           <Button
             disabled={isProsessing}
             onClick={() => handleBuy()}
-            className="mt-12"
+            className="mt-8"
           >
             {isProsessing ? (
               <Loader2Icon className="animate-spin" />
@@ -192,7 +198,13 @@ export function DatasetCard(props: {
           </Button>
         )}
         {/* Open data icon */}
-        {/* TODO: */}
+        {(!isUserSeller || isUserPurchased) && (
+          <Link href={`/datasets/data/${props.dataset._id}`}>
+            <Button variant="outline" className="mt-8">
+              <BracesIcon /> Open data
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
