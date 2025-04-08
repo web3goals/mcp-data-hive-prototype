@@ -170,7 +170,7 @@ export function DatasetCard(props: {
             <div className="flex-1">
               <p className="text-sm text-muted-foreground">Seller</p>
               <Link
-                href={`${chainConfig.chain.blockExplorers?.default.url}/token/${props.dataset.sellerAddress}`}
+                href={`${chainConfig.chain.blockExplorers?.default.url}/address/${props.dataset.sellerAddress}`}
                 target="_blank"
               >
                 <p className="text-sm underline underline-offset-4">
