@@ -10,7 +10,7 @@ import {
   LogInIcon,
   LogOutIcon,
   MenuIcon,
-  ShoppingBag,
+  ShoppingBagIcon,
   StoreIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -75,7 +75,7 @@ export function SiteHeader() {
                   </Link>
                   <Link href="/datasets/purchased">
                     <DropdownMenuItem>
-                      <ShoppingBag />
+                      <ShoppingBagIcon />
                       <span>Purchased datasets</span>
                     </DropdownMenuItem>
                   </Link>
