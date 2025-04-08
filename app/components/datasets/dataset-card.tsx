@@ -182,29 +182,27 @@ export function DatasetCard(props: {
           {/* Sales */}
           {/* TODO: */}
         </div>
-        {/* Buy button  */}
-        {!isUserPurchased && (
-          <Button
-            disabled={isProsessing}
-            onClick={() => handleBuy()}
-            className="mt-8"
-          >
-            {isProsessing ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <ShoppingBagIcon />
-            )}
-            Buy
-          </Button>
-        )}
-        {/* Open data icon */}
-        {(!isUserSeller || isUserPurchased) && (
-          <Link href={`/datasets/data/${props.dataset._id}`}>
-            <Button variant="outline" className="mt-8">
-              <BracesIcon /> Open data
+        {/* Actions */}
+        <div className="flex flex-row gap-2 mt-8">
+          {!isUserPurchased && (
+            <Button disabled={isProsessing} onClick={() => handleBuy()}>
+              {isProsessing ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                <ShoppingBagIcon />
+              )}
+              Buy
             </Button>
-          </Link>
-        )}
+          )}
+          {/* Open data icon */}
+          {(isUserSeller || isUserPurchased) && (
+            <Link href={`/datasets/data/${props.dataset._id}`}>
+              <Button variant="outline">
+                <BracesIcon /> Open data
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );
