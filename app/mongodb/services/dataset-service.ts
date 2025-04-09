@@ -6,14 +6,17 @@ import { Dataset } from "../models/dataset";
 
 // TODO: Implement finding by buyerId
 export async function findDatasets(params: {
+  id?: ObjectId;
   sellerId?: string;
   buyerId?: string;
 }): Promise<Dataset[]> {
   const collection = await getCollectionDatasets();
   const datasets = await collection
     .find({
+      ...(params.id && { _id: params.id }),
       ...(params.sellerId && { creatorUserId: params.sellerId }),
     })
+    .sort({ createdDate: -1 })
     .toArray();
   return datasets;
 }

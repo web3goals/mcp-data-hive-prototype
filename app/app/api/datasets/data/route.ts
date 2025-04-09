@@ -2,27 +2,28 @@
 
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
-import { findDatasets } from "@/mongodb/services/dataset-service";
-import { ObjectId } from "mongodb";
+import { loadJsonData } from "@/lib/recall";
 import { NextRequest } from "next/server";
+import { Address } from "viem";
 
 export async function GET(request: NextRequest) {
   try {
     // Get query parameters
     const url = new URL(request.url);
-    const id = url.searchParams.get("id") || undefined;
-    const sellerId = url.searchParams.get("sellerId") || undefined;
-    const buyerId = url.searchParams.get("buyerId") || undefined;
+    const bucket = url.searchParams.get("bucket") || undefined;
+    const key = url.searchParams.get("key") || undefined;
+    if (!bucket || !key) {
+      return createFailedApiResponse(
+        { message: "Request params invalid" },
+        400
+      );
+    }
 
-    // Find dataset
-    const datasets = await findDatasets({
-      id: id ? new ObjectId(id) : undefined,
-      sellerId: sellerId,
-      buyerId: buyerId,
-    });
+    // Load data
+    const data = await loadJsonData(bucket as Address, key);
 
-    // Return the datasets
-    return createSuccessApiResponse(datasets);
+    // Return the data
+    return createSuccessApiResponse(data);
   } catch (error) {
     console.error(
       `Failed to process ${request.method} request for "${
