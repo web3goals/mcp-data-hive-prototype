@@ -52,7 +52,10 @@ export async function POST(request: NextRequest) {
       type: bodyParseResult.data.type,
       name: bodyParseResult.data.name,
       description: bodyParseResult.data.description,
-      attributes: bodyParseResult.data.attributes,
+      attributes: {
+        symbol: bodyParseResult.data.attributes.symbol.toLowerCase(),
+        source: bodyParseResult.data.attributes.source.toLowerCase(),
+      },
       price: bodyParseResult.data.price,
       data: {
         provider: "RECALL",
