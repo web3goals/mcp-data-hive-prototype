@@ -2,6 +2,15 @@ import { Hex } from "viem";
 import { findDatasets } from "../mongodb/services/dataset-service";
 import { logger } from "./logger";
 import { loadJsonData } from "./recall";
+import { Dataset } from "../mongodb/models/dataset";
+
+export async function getDatasets(accessToken: string): Promise<Dataset[]> {
+  logger.info(`Getting datasets for '${accessToken}'...`);
+  const buyerId = accessToken;
+  return await findDatasets({
+    buyerId: buyerId,
+  });
+}
 
 export async function getCandles(
   accessToken: string,
@@ -15,7 +24,7 @@ export async function getCandles(
   const datasets = await findDatasets({
     type: "CANDLES",
     attributes: { symbol, source },
-    buyerId,
+    buyerId: buyerId,
   });
   const dataset = datasets[0];
   if (!dataset) {
@@ -40,7 +49,7 @@ export async function getSentiment(
   const datasets = await findDatasets({
     type: "SENTIMENT",
     attributes: { symbol, source },
-    buyerId,
+    buyerId: buyerId,
   });
   const dataset = datasets[0];
   if (!dataset) {

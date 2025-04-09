@@ -5,7 +5,9 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { getCandles, getSentiment } from "./dataset";
+import { getCandles, getDatasets, getSentiment } from "./dataset";
+
+const GetDatasetsSchema = z.object({});
 
 const GetCandlesSchema = z.object({
   symbol: z
@@ -44,6 +46,12 @@ export function createServer(params: {
     return {
       tools: [
         {
+          name: "get_datasets",
+          description:
+            "Get an array of purchased datasets (type, name, description)",
+          inputSchema: zodToJsonSchema(GetDatasetsSchema),
+        },
+        {
           name: "get_candles",
           description:
             "Get an array of trading candles data (date, open, high, low, close, volume) for the specified symbol and source",
@@ -74,6 +82,27 @@ export function createServer(params: {
       }
 
       switch (request.params.name) {
+        case "get_datasets": {
+          const datasets = await getDatasets(accessToken);
+          return {
+            content: [
+              {
+                type: "text",
+                text:
+                  datasets.length > 0
+                    ? JSON.stringify(
+                        datasets.map((dataset) => ({
+                          type: dataset.type,
+                          name: dataset.name,
+                          description: dataset.description,
+                        }))
+                      )
+                    : "Datasets not found, the user probably did not purchase any datasets yet",
+              },
+            ],
+          };
+        }
+
         case "get_candles": {
           const args = GetCandlesSchema.parse(request.params.arguments);
           const candles = await getCandles(
