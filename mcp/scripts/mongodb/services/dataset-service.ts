@@ -14,7 +14,7 @@ export async function findDatasets(params: {
   const datasets = await collection
     .find({
       ...(params.type && { type: params.type }),
-      ...(params.attributes && { type: params.attributes }),
+      ...(params.attributes && { attributes: params.attributes }),
       ...(params.buyerId && {
         sales: {
           $elemMatch: {
