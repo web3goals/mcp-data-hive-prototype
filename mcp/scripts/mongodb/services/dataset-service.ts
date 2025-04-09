@@ -6,20 +6,22 @@ import { Dataset } from "../models/dataset";
 import { DatasetType } from "../../types/dataset-type";
 
 export async function findDatasets(params: {
-  type: DatasetType;
-  attributes: DatasetAttributes;
-  buyerId: string;
+  type?: DatasetType;
+  attributes?: DatasetAttributes;
+  buyerId?: string;
 }): Promise<Dataset[]> {
   const collection = await getCollectionDatasets();
   const datasets = await collection
     .find({
-      type: params.type,
-      attributes: params.attributes,
-      sales: {
-        $elemMatch: {
-          buyerId: params.buyerId,
+      ...(params.type && { type: params.type }),
+      ...(params.attributes && { type: params.attributes }),
+      ...(params.buyerId && {
+        sales: {
+          $elemMatch: {
+            buyerId: params.buyerId,
+          },
         },
-      },
+      }),
     })
     .sort({ createdDate: -1 })
     .toArray();
