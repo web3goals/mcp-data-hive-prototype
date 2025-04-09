@@ -1,10 +1,10 @@
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import * as dotenv from "dotenv";
+dotenv.config();
+
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import express, { Request, Response } from "express";
 import { logger } from "./lib/logger";
 import { createServer } from "./lib/server";
-
-dotenv.config();
 
 async function main() {
   logger.info("Starting MCP server...");

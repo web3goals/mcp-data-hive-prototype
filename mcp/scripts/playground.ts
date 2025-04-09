@@ -1,10 +1,11 @@
 import * as dotenv from "dotenv";
+dotenv.config();
+
 import { v4 as uuidv4 } from "uuid";
+import { Hex } from "viem";
 import { generatePrivateKey, privateKeyToAddress } from "viem/accounts";
 import { logger } from "./lib/logger";
 import { loadJsonData, saveJsonData } from "./lib/recall";
-
-dotenv.config();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createWallet() {
@@ -19,12 +20,13 @@ function createWallet() {
 async function useRecall() {
   logger.info("Using Recall...");
 
-  const key = uuidv4();
   const data = { message: "Hello world!" };
-  await saveJsonData(data, key);
-  logger.info(`Data saved with key: ${key}`);
+  const bucket = process.env.RECALL_BUCKET as Hex;
+  const key = uuidv4();
+  await saveJsonData(data, bucket, key);
+  logger.info(`Data saved with key: ${key} in bucket: ${bucket}`);
 
-  const loadedData = await loadJsonData(key);
+  const loadedData = await loadJsonData(bucket, key);
   logger.info(`Data loaded: ${JSON.stringify(loadedData)}`);
 }
 

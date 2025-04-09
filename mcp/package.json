@@ -22,6 +22,7 @@
     "@recallnet/chains": "^0.0.7",
     "@recallnet/sdk": "^0.0.8",
     "express": "^5.1.0",
+    "mongodb": "^6.15.0",
     "uuid": "^11.1.0",
     "viem": "^2.25.0",
     "winston": "^3.17.0"

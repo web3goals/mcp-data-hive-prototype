@@ -1,5 +1,5 @@
 import { testnet } from "@recallnet/chains";
-import { createWalletClient, Hex, http } from "viem";
+import { Address, createWalletClient, Hex, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 async function getBucketManager() {
@@ -15,21 +15,21 @@ async function getBucketManager() {
   return client.bucketManager();
 }
 
-export async function saveJsonData(data: object, key: string) {
+export async function saveJsonData(data: object, bucket: Address, key: string) {
   const content = new TextEncoder().encode(JSON.stringify(data, null, 2));
   const file = new File([content], "data.json", {
     type: "application/json",
   });
   const bucketManager = await getBucketManager();
-  await bucketManager.add(process.env.RECALL_BUCKET as Hex, key, file);
+  await bucketManager.add(bucket, key, file);
 }
 
-export async function loadJsonData(key: string): Promise<object> {
+export async function loadJsonData(
+  bucket: Address,
+  key: string
+): Promise<object> {
   const bucketManager = await getBucketManager();
-  const { result } = await bucketManager.get(
-    process.env.RECALL_BUCKET as Hex,
-    key
-  );
+  const { result } = await bucketManager.get(bucket, key);
   const content = new TextDecoder().decode(result);
   return JSON.parse(content);
 }

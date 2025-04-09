@@ -85,7 +85,9 @@ export function createServer(params: {
             content: [
               {
                 type: "text",
-                text: candles ? JSON.stringify(candles) : "No data",
+                text: candles
+                  ? JSON.stringify(candles)
+                  : "Data not found, the user probably did not purchase the dataset",
               },
             ],
           };
@@ -102,7 +104,9 @@ export function createServer(params: {
             content: [
               {
                 type: "text",
-                text: sentiment ? JSON.stringify(sentiment) : "No data",
+                text: sentiment
+                  ? JSON.stringify(sentiment)
+                  : "Data not found, the user probably did not purchase the dataset",
               },
             ],
           };
