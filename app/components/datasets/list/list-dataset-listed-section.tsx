@@ -2,9 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { FileJsonIcon, StoreIcon } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 import Confetti from "react-confetti";
 
 export function ListDatasetListedSection() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <main className="container mx-auto px-4 lg:px-80 py-16">
       <div className="flex items-center justify-center size-24 rounded-full bg-primary">
