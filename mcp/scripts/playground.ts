@@ -6,6 +6,7 @@ import { Hex } from "viem";
 import { generatePrivateKey, privateKeyToAddress } from "viem/accounts";
 import { logger } from "./lib/logger";
 import { loadJsonData, saveJsonData } from "./lib/recall";
+import { findDatasets } from "./mongodb/services/dataset-service";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createWallet() {
@@ -28,6 +29,16 @@ async function useRecall() {
 
   const loadedData = await loadJsonData(bucket, key);
   logger.info(`Data loaded: ${JSON.stringify(loadedData)}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function useDatasets() {
+  logger.info("Using datasets...");
+
+  const datasets = await findDatasets({
+    type: "CANDLES",
+  });
+  logger.info(`Datasets: ${JSON.stringify(datasets, null, 2)}`);
 }
 
 async function main() {
