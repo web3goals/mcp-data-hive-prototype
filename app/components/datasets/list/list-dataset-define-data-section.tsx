@@ -52,11 +52,20 @@ export function ListDatasetDefineDataSection(props: {
         return;
       }
 
+      // Check if data is valid JSON
+      let valuesDataJson;
+      try {
+        valuesDataJson = JSON.parse(values.data);
+      } catch {
+        toast.error("Please provide valid JSON data.");
+        return;
+      }
+
       // Prepare a request data
       const requestData = { ...props.requestData };
       requestData.sellerId = user.id;
       requestData.sellerAddress = user.wallet?.address;
-      requestData.data = values.data;
+      requestData.data = JSON.stringify(valuesDataJson);
 
       // Send request to list dataset
       const { data } = await axios.post("/api/datasets/list", requestData);

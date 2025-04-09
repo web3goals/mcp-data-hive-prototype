@@ -2,9 +2,11 @@
 
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
+import { saveJsonData } from "@/lib/recall";
 import { Dataset } from "@/mongodb/models/dataset";
 import { insertDataset } from "@/mongodb/services/dataset-service";
 import { NextRequest } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 import { Address } from "viem";
 import { z } from "zod";
 
@@ -36,7 +38,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Upload data to Recall
+    // Upload data to Recall
+    const bucket = process.env.RECALL_BUCKET as Address;
+    const key = uuidv4();
+    const dataJson = JSON.parse(bodyParseResult.data.data);
+    await saveJsonData(dataJson, bucket, key);
 
     // Create a dataset
     const dataset: Dataset = {
@@ -50,16 +56,18 @@ export async function POST(request: NextRequest) {
       price: bodyParseResult.data.price,
       data: {
         provider: "RECALL",
-        bucket: "",
-        key: "",
+        bucket: bucket,
+        key: key,
       },
       sales: [],
     };
 
+    // Insert the dataset into the database
     const datasetId = await insertDataset(dataset);
     dataset._id = datasetId;
 
-    // TODO: List the dataset using contract
+    // List the dataset using the contract
+    // TODO: Implement
 
     // Return the dataset
     return createSuccessApiResponse(dataset);

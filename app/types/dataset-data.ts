@@ -1,1 +1,1 @@
-export type DatasetData = { provider: "RECALL"; bucket: ""; key: string };
+export type DatasetData = { provider: "RECALL"; bucket: string; key: string };
