@@ -4,7 +4,6 @@ import { Collection, ObjectId } from "mongodb";
 import clientPromise from "../client";
 import { Dataset } from "../models/dataset";
 
-// TODO: Implement finding by buyerId
 export async function findDatasets(params: {
   id?: ObjectId;
   sellerId?: string;
@@ -14,7 +13,14 @@ export async function findDatasets(params: {
   const datasets = await collection
     .find({
       ...(params.id && { _id: params.id }),
-      ...(params.sellerId && { creatorUserId: params.sellerId }),
+      ...(params.sellerId && { sellerId: params.sellerId }),
+      ...(params.buyerId && {
+        sales: {
+          $elemMatch: {
+            buyerId: params.buyerId,
+          },
+        },
+      }),
     })
     .sort({ createdDate: -1 })
     .toArray();
