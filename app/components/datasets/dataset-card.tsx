@@ -180,7 +180,33 @@ export function DatasetCard(props: {
             </div>
           </div>
           {/* Sales */}
-          {/* TODO: */}
+          {isUserSeller && (
+            <div className="flex flex-row gap-3">
+              <div className="flex items-center justify-center size-8 rounded-full bg-primary">
+                <UserRoundIcon className="size-4 text-primary-foreground" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Sales</p>
+                {props.dataset.sales.length > 0 ? (
+                  <div className="flex flex-col gap-1">
+                    {props.dataset.sales.map((sale, index) => (
+                      <Link
+                        key={index}
+                        href={`${chainConfig.chain.blockExplorers?.default.url}/tx/${sale.txHash}`}
+                        target="_blank"
+                      >
+                        <p className="text-sm underline underline-offset-4">
+                          {sale.date.toLocaleString()}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm">No sales yet</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         {/* Actions */}
         <div className="flex flex-row gap-2 mt-8">
