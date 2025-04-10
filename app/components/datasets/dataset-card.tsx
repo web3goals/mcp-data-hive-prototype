@@ -1,9 +1,10 @@
 import { chainConfig } from "@/config/chain";
+import { marketplaceAbi } from "@/contracts/abi/marketplace";
 import useError from "@/hooks/use-error";
 import { addressToShortAddress } from "@/lib/converters";
 import { Dataset } from "@/mongodb/models/dataset";
 import { DatasetType } from "@/types/dataset-type";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import axios from "axios";
 import {
   BracesIcon,
@@ -17,11 +18,18 @@ import {
   TextIcon,
   UserRoundIcon,
 } from "lucide-react";
+import { ObjectId } from "mongodb";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
-import { formatEther } from "viem";
+import {
+  Address,
+  createPublicClient,
+  createWalletClient,
+  custom,
+  formatEther,
+} from "viem";
 import { Button } from "../ui/button";
 
 export function DatasetCard(props: {
@@ -29,6 +37,7 @@ export function DatasetCard(props: {
   onDatasetUpdate: () => void;
 }) {
   const { user } = usePrivy();
+  const { wallets } = useWallets();
   const { handleError } = useError();
   const [isProsessing, setIsProsessing] = useState(false);
 
@@ -52,9 +61,42 @@ export function DatasetCard(props: {
         return;
       }
 
-      // Use contract
-      // TODO: Implement contract call
-      const txHash = "0x0";
+      // Check if user has a wallet connected
+      const wallet = wallets[0];
+      if (!wallet) {
+        toast.warning(`Please login`);
+        return;
+      }
+
+      // Check if user has a wallet connected to the right chain
+      if (
+        wallet.chainId.replace("eip155:", "") !==
+        chainConfig.chain.id.toString()
+      ) {
+        toast.warning(`Please connect to ${chainConfig.chain.name}`);
+        return;
+      }
+
+      // Use contract to buy the dataset
+      const provider = await wallet.getEthereumProvider();
+      const publicClient = createPublicClient({
+        chain: chainConfig.chain,
+        transport: custom(provider),
+      });
+      const walletClient = createWalletClient({
+        account: wallet.address as Address,
+        chain: chainConfig.chain,
+        transport: custom(provider),
+      });
+      const { request } = await publicClient.simulateContract({
+        account: wallet.address as Address,
+        address: chainConfig.contracts.marketplace,
+        abi: marketplaceAbi,
+        functionName: "buy",
+        args: [(props.dataset._id as ObjectId).toString()],
+        value: BigInt(props.dataset.price),
+      });
+      const txHash = await walletClient.writeContract(request);
 
       // Send request to API
       await axios.post("/api/datasets/buy", {
