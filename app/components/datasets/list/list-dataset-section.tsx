@@ -13,8 +13,8 @@ export function ListDatasetSection() {
     // name: "D, ETH/USDT, Binance",
     // description: "March ETH/USDT daily OHLCV candles taken from Binance",
     // attributes: {
-    //   symbol: "ETHUSDT",
-    //   source: "Binance",
+    //   symbol: "ethusdt",
+    //   source: "binance",
     // },
     // price: parseEther("0.01").toString(),
   });

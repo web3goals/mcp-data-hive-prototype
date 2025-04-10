@@ -123,7 +123,7 @@ export function ListDatasetDefineParamsSection(props: {
                 <FormControl>
                   <Input
                     placeholder={
-                      props.requestData.type === "CANDLES" ? "ETHUSDT" : "ETH"
+                      props.requestData.type === "CANDLES" ? "ethusdt" : "eth"
                     }
                     disabled={isProsessing}
                     {...field}
@@ -142,7 +142,7 @@ export function ListDatasetDefineParamsSection(props: {
                 <FormControl>
                   <Input
                     placeholder={
-                      props.requestData.type === "CANDLES" ? "Binance" : "X"
+                      props.requestData.type === "CANDLES" ? "binance" : "x"
                     }
                     disabled={isProsessing}
                     {...field}
