@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Add sale to dataset
     await addDatasetSale(new ObjectId(bodyParseResult.data.id), {
-      date: new Date().toISOString(),
+      date: new Date(),
       buyerId: bodyParseResult.data.buyerId,
       buyerAddress: bodyParseResult.data.buyerAddress as Address,
       txHash: bodyParseResult.data.txHash as Hash,
