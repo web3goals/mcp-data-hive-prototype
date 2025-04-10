@@ -1,5 +1,7 @@
 "use server";
 
+import { chainConfig } from "@/config/chain";
+import { marketplaceAbi } from "@/contracts/abi/marketplace";
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
 import { saveJsonData } from "@/lib/recall";
@@ -7,7 +9,14 @@ import { Dataset } from "@/mongodb/models/dataset";
 import { insertDataset } from "@/mongodb/services/dataset-service";
 import { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
-import { Address } from "viem";
+import {
+  Address,
+  createPublicClient,
+  createWalletClient,
+  Hex,
+  http,
+} from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { z } from "zod";
 
 const requestBodySchema = z.object({
@@ -69,8 +78,32 @@ export async function POST(request: NextRequest) {
     const datasetId = await insertDataset(dataset);
     dataset._id = datasetId;
 
-    // List the dataset using the contract
-    // TODO: Implement
+    // List the dataset using the marketplace contract
+    const account = privateKeyToAccount(
+      process.env.MARKETPLACE_ACCOUNT_PRIVATE_KEY as Hex
+    );
+    const publicClient = createPublicClient({
+      chain: chainConfig.chain,
+      transport: http(),
+    });
+    const walletClient = createWalletClient({
+      account: account,
+      chain: chainConfig.chain,
+      transport: http(),
+    });
+    const { request: listRequest } = await publicClient.simulateContract({
+      account: account,
+      address: chainConfig.contracts.marketplace,
+      abi: marketplaceAbi,
+      functionName: "list",
+      args: [
+        dataset._id.toString(),
+        dataset.sellerAddress,
+        BigInt(dataset.price),
+      ],
+    });
+    const hash = await walletClient.writeContract(listRequest);
+    await publicClient.waitForTransactionReceipt({ hash });
 
     // Return the dataset
     return createSuccessApiResponse(dataset);
