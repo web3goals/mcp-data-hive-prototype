@@ -2,8 +2,6 @@ import { testnet } from "@recallnet/chains";
 import { Address, createWalletClient, Hex, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-// TODO: Rename functions
-
 async function getRecallBucketManager() {
   const walletClient = createWalletClient({
     account: privateKeyToAccount(process.env.RECALL_ACCOUNT_PRIVATE_KEY as Hex),
