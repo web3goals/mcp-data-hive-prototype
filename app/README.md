@@ -14,6 +14,11 @@
 NEXT_PUBLIC_PRIVY_APP_ID=""
 
 MONGODB_URI=""
+
+RECALL_ACCOUNT_PRIVATE_KEY=""
+RECALL_BUCKET=""
+
+MARKETPLACE_ACCOUNT_PRIVATE_KEY=""
 ```
 
 ### How to fix `zustand` error from `@privy-io/react-auth`
