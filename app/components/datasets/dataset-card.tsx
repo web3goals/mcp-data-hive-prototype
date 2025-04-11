@@ -13,7 +13,9 @@ import {
   DatabaseIcon,
   DollarSignIcon,
   FileJsonIcon,
+  ListIcon,
   Loader2Icon,
+  NetworkIcon,
   ShoppingBagIcon,
   TextIcon,
   UserRoundIcon,
@@ -204,6 +206,18 @@ export function DatasetCard(props: {
               </p>
             </div>
           </div>
+          {/* Data protocol */}
+          <div className="flex flex-row gap-3">
+            <div className="flex items-center justify-center size-8 rounded-full bg-primary">
+              <NetworkIcon className="size-4 text-primary-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm text-muted-foreground">Protocol</p>
+              <p className="text-sm">
+                {props.dataset.data.protocol === "RECALL" ? "Recall" : "Akave"}
+              </p>
+            </div>
+          </div>
           {/* Seller */}
           <div className="flex flex-row gap-3">
             <div className="flex items-center justify-center size-8 rounded-full bg-primary">
@@ -225,7 +239,7 @@ export function DatasetCard(props: {
           {isUserSeller && (
             <div className="flex flex-row gap-3">
               <div className="flex items-center justify-center size-8 rounded-full bg-primary">
-                <UserRoundIcon className="size-4 text-primary-foreground" />
+                <ListIcon className="size-4 text-primary-foreground" />
               </div>
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground">Sales</p>

@@ -2,11 +2,13 @@
 
 import { chainConfig } from "@/config/chain";
 import { marketplaceAbi } from "@/contracts/abi/marketplace";
+import { saveAkaveJsonData } from "@/lib/akave";
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
 import { saveRecallJsonData } from "@/lib/recall";
 import { Dataset } from "@/mongodb/models/dataset";
 import { insertDataset } from "@/mongodb/services/dataset-service";
+import { DatasetData } from "@/types/dataset-data";
 import { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -30,6 +32,7 @@ const requestBodySchema = z.object({
     source: z.string().min(1),
   }),
   price: z.string().min(1),
+  dataProtocol: z.enum(["RECALL", "AKAVE"]),
   data: z.string().min(1),
 });
 
@@ -47,11 +50,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upload data to Recall
-    const bucket = process.env.RECALL_BUCKET as Address;
-    const key = uuidv4();
-    const dataJson = JSON.parse(bodyParseResult.data.data);
-    await saveRecallJsonData(dataJson, bucket, key);
+    // Upload data to data protocol
+    let datasetData: DatasetData | undefined;
+    if (bodyParseResult.data.dataProtocol === "RECALL") {
+      const bucket = process.env.RECALL_BUCKET as Address;
+      const key = uuidv4();
+      const dataJson = JSON.parse(bodyParseResult.data.data);
+      await saveRecallJsonData(dataJson, bucket, key);
+      datasetData = { protocol: "RECALL", bucket: bucket, key: key };
+    }
+    if (bodyParseResult.data.dataProtocol === "AKAVE") {
+      const bucket = process.env.AKAVE_BUCKET as string;
+      const name = uuidv4();
+      const dataJson = JSON.parse(bodyParseResult.data.data);
+      await saveAkaveJsonData(dataJson, bucket, name);
+      datasetData = { protocol: "AKAVE", bucket: bucket, name: name };
+    }
+    if (!datasetData) {
+      throw new Error("Dataset data is undefined");
+    }
 
     // Create a dataset
     const dataset: Dataset = {
@@ -66,11 +83,7 @@ export async function POST(request: NextRequest) {
         source: bodyParseResult.data.attributes.source.toLowerCase(),
       },
       price: bodyParseResult.data.price,
-      data: {
-        provider: "RECALL",
-        bucket: bucket,
-        key: key,
-      },
+      data: datasetData,
       sales: [],
     };
 

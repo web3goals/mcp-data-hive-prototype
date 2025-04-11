@@ -11,8 +11,6 @@ export function DatasetDataSection(props: { id: string }) {
   const [dataset, setDataset] = useState<Dataset | undefined>();
   const [datasetData, setDatasetData] = useState<object | undefined>();
 
-  console.log({ dataset });
-
   useEffect(() => {
     axios
       .get("/api/datasets", { params: { id: props.id } })
@@ -24,18 +22,16 @@ export function DatasetDataSection(props: { id: string }) {
   }, [props.id]);
 
   useEffect(() => {
-    if (dataset) {
-      axios
-        .get("/api/datasets/data", {
-          params: { bucket: dataset.data.bucket, key: dataset.data.key },
-        })
-        .then(({ data }) => setDatasetData(data.data))
-        .catch((error) =>
-          handleError(error, "Failed to load dataset data, try again later")
-        );
-    }
+    axios
+      .get("/api/datasets/data", {
+        params: { id: props.id },
+      })
+      .then(({ data }) => setDatasetData(data.data))
+      .catch((error) =>
+        handleError(error, "Failed to load dataset data, try again later")
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataset]);
+  }, [props.id]);
 
   if (!dataset || !datasetData) {
     return <LoadingSection />;

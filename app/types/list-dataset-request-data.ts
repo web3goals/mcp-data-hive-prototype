@@ -9,5 +9,6 @@ export type ListDatasetRequestData = {
   description?: string;
   attributes?: DatasetAttributes;
   price?: string;
+  dataProtocol?: "RECALL" | "AKAVE";
   data?: string;
 };

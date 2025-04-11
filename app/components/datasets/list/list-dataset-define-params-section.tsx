@@ -88,7 +88,11 @@ export function ListDatasetDefineParamsSection(props: {
                 <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="D, ETH/USDT, Binance"
+                    placeholder={
+                      props.requestData.type === "CANDLES"
+                        ? "D, ETH/USDT, Binance"
+                        : "D, ETH, X"
+                    }
                     disabled={isProsessing}
                     {...field}
                   />
@@ -105,7 +109,11 @@ export function ListDatasetDefineParamsSection(props: {
                 <FormLabel>Description *</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="March ETH/USDT daily OHLCV candles taken from Binance"
+                    placeholder={
+                      props.requestData.type === "CANDLES"
+                        ? "March ETH/USDT daily OHLCV candles taken from Binance"
+                        : "March ETH daily sentiment taken from X"
+                    }
                     disabled={isProsessing}
                     {...field}
                   />

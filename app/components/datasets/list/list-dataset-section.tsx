@@ -2,6 +2,7 @@ import { LoadingSection } from "@/components/loading-section";
 import { Dataset } from "@/mongodb/models/dataset";
 import { ListDatasetRequestData } from "@/types/list-dataset-request-data";
 import { useState } from "react";
+import { ListDatasetDefineDataProtocolSection } from "./list-dataset-define-data-protocol-section";
 import { ListDatasetDefineDataSection } from "./list-dataset-define-data-section";
 import { ListDatasetDefineParamsSection } from "./list-dataset-define-params-section";
 import { ListDatasetDefineTypeSection } from "./list-dataset-define-type-section";
@@ -43,6 +44,17 @@ export function ListDatasetSection() {
   ) {
     return (
       <ListDatasetDefineParamsSection
+        requestData={requestData}
+        onRequestDataUpdate={(listDatasetRequestData) =>
+          setRequestData(listDatasetRequestData)
+        }
+      />
+    );
+  }
+
+  if (!requestData?.dataProtocol) {
+    return (
+      <ListDatasetDefineDataProtocolSection
         requestData={requestData}
         onRequestDataUpdate={(listDatasetRequestData) =>
           setRequestData(listDatasetRequestData)
