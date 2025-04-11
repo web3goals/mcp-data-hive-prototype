@@ -1,8 +1,8 @@
 import { Hex } from "viem";
+import { Dataset } from "../mongodb/models/dataset";
 import { findDatasets } from "../mongodb/services/dataset-service";
 import { logger } from "./logger";
-import { loadJsonData } from "./recall";
-import { Dataset } from "../mongodb/models/dataset";
+import { loadRecallJsonData } from "./recall";
 
 export async function getDatasets(accessToken: string): Promise<Dataset[]> {
   logger.info(`Getting datasets for '${accessToken}'...`);
@@ -30,7 +30,7 @@ export async function getCandles(
   if (!dataset) {
     return undefined;
   }
-  const datasetData = await loadJsonData(
+  const datasetData = await loadRecallJsonData(
     dataset.data.bucket as Hex,
     dataset.data.key
   );
@@ -55,7 +55,7 @@ export async function getSentiment(
   if (!dataset) {
     return undefined;
   }
-  const datasetData = await loadJsonData(
+  const datasetData = await loadRecallJsonData(
     dataset.data.bucket as Hex,
     dataset.data.key
   );

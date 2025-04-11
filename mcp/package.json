@@ -21,6 +21,7 @@
     "@modelcontextprotocol/sdk": "^1.8.0",
     "@recallnet/chains": "^0.0.7",
     "@recallnet/sdk": "^0.0.8",
+    "axios": "^1.8.4",
     "express": "^5.1.0",
     "mongodb": "^6.15.0",
     "uuid": "^11.1.0",

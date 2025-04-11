@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { Hex } from "viem";
 import { generatePrivateKey, privateKeyToAddress } from "viem/accounts";
+import { loadAkaveJsonData, saveAkaveJsonData } from "./lib/akave";
 import { logger } from "./lib/logger";
-import { loadJsonData, saveJsonData } from "./lib/recall";
+import { loadRecallJsonData, saveRecallJsonData } from "./lib/recall";
 import { findDatasets } from "./mongodb/services/dataset-service";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createWallet() {
   logger.info("Creating a new wallet...");
   const privateKey = generatePrivateKey();
@@ -17,21 +20,32 @@ function createWallet() {
   logger.info(`Private Key: ${privateKey}`);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function useRecall() {
   logger.info("Using Recall...");
 
   const data = { message: "Hello world!" };
   const bucket = process.env.RECALL_BUCKET as Hex;
   const key = uuidv4();
-  await saveJsonData(data, bucket, key);
+  await saveRecallJsonData(data, bucket, key);
   logger.info(`Data saved with key: ${key} in bucket: ${bucket}`);
 
-  const loadedData = await loadJsonData(bucket, key);
+  const loadedData = await loadRecallJsonData(bucket, key);
   logger.info(`Data loaded: ${JSON.stringify(loadedData)}`);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function useAkave() {
+  logger.info("Using Akave...");
+
+  const data = { message: "Hello world!" };
+  const bucket = process.env.AKAVE_BUCKET as string;
+  const name = uuidv4();
+  await saveAkaveJsonData(data, bucket, name);
+  logger.info(`Data saved with name: ${name} in bucket: ${bucket}`);
+
+  const loadedData = await loadAkaveJsonData(bucket, name);
+  logger.info(`Data loaded: ${JSON.stringify(loadedData)}`);
+}
+
 async function useDatasets() {
   logger.info("Using datasets...");
 
@@ -46,6 +60,14 @@ async function main() {
 }
 
 main().catch((error) => {
-  logger.error(error);
+  if (axios.isAxiosError(error)) {
+    logger.error(`Axios error: ${error.message}`);
+    if (error.response) {
+      logger.error(`Status: ${error.response.status}`);
+      logger.error(`Data: ${JSON.stringify(error.response.data)}`);
+    }
+  } else {
+    logger.error(error);
+  }
   process.exitCode = 1;
 });
