@@ -4,7 +4,7 @@ import { chainConfig } from "@/config/chain";
 import { marketplaceAbi } from "@/contracts/abi/marketplace";
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
-import { saveJsonData } from "@/lib/recall";
+import { saveRecallJsonData } from "@/lib/recall";
 import { Dataset } from "@/mongodb/models/dataset";
 import { insertDataset } from "@/mongodb/services/dataset-service";
 import { NextRequest } from "next/server";
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const bucket = process.env.RECALL_BUCKET as Address;
     const key = uuidv4();
     const dataJson = JSON.parse(bodyParseResult.data.data);
-    await saveJsonData(dataJson, bucket, key);
+    await saveRecallJsonData(dataJson, bucket, key);
 
     // Create a dataset
     const dataset: Dataset = {

@@ -2,7 +2,7 @@
 
 import { createFailedApiResponse, createSuccessApiResponse } from "@/lib/api";
 import { errorToString } from "@/lib/converters";
-import { loadJsonData } from "@/lib/recall";
+import { loadRecallJsonData } from "@/lib/recall";
 import { NextRequest } from "next/server";
 import { Address } from "viem";
 
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Load data
-    const data = await loadJsonData(bucket as Address, key);
+    const data = await loadRecallJsonData(bucket as Address, key);
 
     // Return the data
     return createSuccessApiResponse(data);
