@@ -30,6 +30,7 @@ export async function getCandles(
   if (!dataset) {
     return undefined;
   }
+  // TODO: Use Recall of Akave depending on provider type
   const datasetData = await loadRecallJsonData(
     dataset.data.bucket as Hex,
     dataset.data.key
@@ -55,6 +56,7 @@ export async function getSentiment(
   if (!dataset) {
     return undefined;
   }
+  // TODO: Use Recall of Akave depending on provider type
   const datasetData = await loadRecallJsonData(
     dataset.data.bucket as Hex,
     dataset.data.key
