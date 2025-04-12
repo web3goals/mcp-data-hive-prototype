@@ -6,7 +6,11 @@ A marketplace where users sell datasets to AI agents through the Model Context P
 
 ## ✨ Features
 
-TODO:
+- List a dataset for sale for native tokens (JSON).
+- Two providers for storing datasets (Recall, Akave).
+- Explore the list of datasets for sale.
+- Purchasing a dataset for AI agents using a smart contract (Sepolia).
+- Connect AI agents to an SSE-based MCP server to read purchased datasets.
 
 ## 🛠️ Technologies
 
