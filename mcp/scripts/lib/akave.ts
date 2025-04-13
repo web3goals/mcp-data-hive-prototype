@@ -1,8 +1,14 @@
 import axios from "axios";
-import { akaveConfig } from "../config/akave";
+
+function getAkaveApiBaseUrl(): string {
+  if (!process.env.AKAVE_API_BASE_URL) {
+    throw new Error("Please config AKAVE_API_BASE_URL in .env");
+  }
+  return process.env.AKAVE_API_BASE_URL;
+}
 
 export async function createAkaveBucket(bucket: string) {
-  const { data } = await axios.post(`${akaveConfig.apiBaseUrl}/buckets`, {
+  const { data } = await axios.post(`${getAkaveApiBaseUrl()}/buckets`, {
     bucketName: bucket,
   });
   if (data.success === "false") {
@@ -11,7 +17,7 @@ export async function createAkaveBucket(bucket: string) {
 }
 
 export async function getAkaveBuckets(): Promise<unknown[]> {
-  const { data } = await axios.get(`${akaveConfig.apiBaseUrl}/buckets`);
+  const { data } = await axios.get(`${getAkaveApiBaseUrl()}/buckets`);
   if (data.success === "false") {
     throw new Error(`Failed to get Akave buckets: ${data.error}`);
   }
@@ -33,7 +39,7 @@ export async function saveAkaveJsonData(
 
   // Send request to the Akave
   const { data: responseData } = await axios.post(
-    `${akaveConfig.apiBaseUrl}/buckets/${bucket}/files`,
+    `${getAkaveApiBaseUrl()}/buckets/${bucket}/files`,
     form
   );
   if (responseData.success === "false") {
@@ -46,7 +52,7 @@ export async function loadAkaveJsonData(
   name: string
 ): Promise<object> {
   const { data } = await axios.get(
-    `${akaveConfig.apiBaseUrl}/buckets/${bucket}/files/${name}.json/download`,
+    `${getAkaveApiBaseUrl()}/buckets/${bucket}/files/${name}.json/download`,
     {
       responseType: "blob",
     }

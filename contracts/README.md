@@ -13,7 +13,7 @@
 
 ## Example of `.env`
 
-```
+```ini
 PRIVATE_KEY=""
 SEPOLIA_RPC_URL=""
 SEPOLIA_ETHERSCAN_API_KEY=""
