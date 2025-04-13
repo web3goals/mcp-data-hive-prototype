@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const AXIOS_TIMEOUT = 30 * 1000; // 30 seconds
+
 function getAkaveApiBaseUrl(): string {
   if (!process.env.AKAVE_API_BASE_URL) {
     throw new Error("Please config AKAVE_API_BASE_URL in .env");
@@ -8,16 +10,22 @@ function getAkaveApiBaseUrl(): string {
 }
 
 export async function createAkaveBucket(bucket: string) {
-  const { data } = await axios.post(`${getAkaveApiBaseUrl()}/buckets`, {
-    bucketName: bucket,
-  });
+  const { data } = await axios.post(
+    `${getAkaveApiBaseUrl()}/buckets`,
+    {
+      bucketName: bucket,
+    },
+    { timeout: AXIOS_TIMEOUT }
+  );
   if (data.success === "false") {
     throw new Error(`Failed to create Akave bucket: ${data.error}`);
   }
 }
 
 export async function getAkaveBuckets(): Promise<unknown[]> {
-  const { data } = await axios.get(`${getAkaveApiBaseUrl()}/buckets`);
+  const { data } = await axios.get(`${getAkaveApiBaseUrl()}/buckets`, {
+    timeout: AXIOS_TIMEOUT,
+  });
   if (data.success === "false") {
     throw new Error(`Failed to get Akave buckets: ${data.error}`);
   }
@@ -40,7 +48,8 @@ export async function saveAkaveJsonData(
   // Send request to the Akave
   const { data: responseData } = await axios.post(
     `${getAkaveApiBaseUrl()}/buckets/${bucket}/files`,
-    form
+    form,
+    { timeout: AXIOS_TIMEOUT }
   );
   if (responseData.success === "false") {
     throw new Error(`Failed to save Akave JSON data: ${responseData.error}`);
@@ -55,6 +64,7 @@ export async function loadAkaveJsonData(
     `${getAkaveApiBaseUrl()}/buckets/${bucket}/files/${name}.json/download`,
     {
       responseType: "blob",
+      timeout: AXIOS_TIMEOUT,
     }
   );
   if (data.success === "false") {
