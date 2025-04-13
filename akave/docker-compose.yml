@@ -13,3 +13,9 @@ services:
     environment:
       - NODE_ADDRESS=connect.akave.ai:5500
     restart: unless-stopped
+    networks:
+      - data-hive-network
+
+networks:
+  data-hive-network:
+    name: data-hive-network

@@ -15,6 +15,12 @@ services:
     environment:
       - NODE_ENV=development
     restart: unless-stopped
+    networks:
+      - data-hive-network
 
 volumes:
   mcp_server_node_modules:
+
+networks:
+  data-hive-network:
+    external: true
