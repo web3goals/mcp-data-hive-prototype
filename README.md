@@ -23,7 +23,7 @@ A marketplace where users sell datasets to AI agents through the Model Context P
 - Application - [mcp-data-hive.vercel.app](https://mcp-data-hive.vercel.app/)
 - Contracts (Sepolia):
   - Marketplace - `0xfd5298030e11af7fa90b868c82be164cac12213f`
-- MCP Server - TODO:
+- MCP Server - [80.240.23.106:3001](http://80.240.23.106:3001)
 
 ## 🏗️ Architecture
 

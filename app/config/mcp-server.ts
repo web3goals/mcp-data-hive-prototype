@@ -1,3 +1,3 @@
 export const mcpServerConfig = {
-  url: "http://127.0.0.1:3001", // TODO: Update the value for production
+  url: "http://80.240.23.106:3001",
 };
