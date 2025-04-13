@@ -15,7 +15,6 @@ services:
     environment:
       - NODE_ENV=development
     restart: unless-stopped
-    network_mode: "host"
 
 volumes:
   mcp_server_node_modules:

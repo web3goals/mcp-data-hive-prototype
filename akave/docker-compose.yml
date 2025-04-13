@@ -13,4 +13,3 @@ services:
     environment:
       - NODE_ADDRESS=connect.akave.ai:5500
     restart: unless-stopped
-    network_mode: "host"
